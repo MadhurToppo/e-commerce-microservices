@@ -25,3 +25,31 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/orderservice
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: P4ssword!
+
+  mongodb:
+    image: mongo:8.0.9
+    environment:
+      - MONGO_INITDB_DATABASE=productservice
+    command:
+      - --replSet
+      - rs0
+      - --bind_ip_all
+    ports:
+      - 27018:27017
+    healthcheck:
+      test: test $$(mongosh --quiet --eval "try {rs.initiate({_id:'rs0',members:[{_id:0,host:\"mongodb:27017\"}]})} catch(e) {rs.status().ok}") -eq 1
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  productservice:
+    build:
+      context: ./productservice
+      dockerfile: Dockerfile
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/productservice?replicaSet=rs0
