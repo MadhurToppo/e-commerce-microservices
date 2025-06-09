@@ -1,0 +1,38 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Java
+*.class
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Environment
+.env
+
+# Others
+out/
+
+# Ignore generated JARs
+*.jar
+
+# Ignore test reports
+/test-results/
+/reports/
+
+# Ignore local configuration
+*.local.yml
+
