@@ -32,7 +32,3 @@ out/
 # Ignore test reports
 /test-results/
 /reports/
-
-# Ignore local configuration
-*.local.yml
-
