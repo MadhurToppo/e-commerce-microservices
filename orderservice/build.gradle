@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '3.5.0'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'java'
+    id 'org.flywaydb.flyway' version '9.22.3'
 }
 
 group = 'com.madhurtoppo.microservices'
@@ -40,6 +41,14 @@ dependencies {
     testImplementation('io.rest-assured:rest-assured')
     testImplementation('org.springframework.boot:spring-boot-testcontainers')
     testImplementation('org.testcontainers:postgresql')
+}
+
+flyway {
+    url = System.getenv('JDBC_DATABASE_URL') ?: 'jdbc:postgresql://localhost:5432/orderservice'
+    user = System.getenv('JDBC_DATABASE_USERNAME') ?: 'postgres'
+    password = System.getenv('JDBC_DATABASE_PASSWORD') ?: 'P4ssword!'
+    schemas = ['public']
+    locations = ['classpath:db/migration']
 }
 
 tasks.withType(Test) {
