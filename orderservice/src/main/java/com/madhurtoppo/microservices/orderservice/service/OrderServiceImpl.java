@@ -1,5 +1,6 @@
 package com.madhurtoppo.microservices.orderservice.service;
 
+import com.madhurtoppo.microservices.orderservice.client.InventoryClient;
 import com.madhurtoppo.microservices.orderservice.domain.Order;
 import com.madhurtoppo.microservices.orderservice.model.OrderDTO;
 import com.madhurtoppo.microservices.orderservice.repos.OrderRepository;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final InventoryClient inventoryClient;
 
-    public OrderServiceImpl(final OrderRepository orderRepository) {
+    public OrderServiceImpl(final OrderRepository orderRepository, InventoryClient inventoryClient) {
         this.orderRepository = orderRepository;
+        this.inventoryClient = inventoryClient;
     }
 
     @Override
@@ -36,9 +39,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public UUID create(final OrderDTO orderDTO) {
+        var isProductInStock = inventoryClient.isInStock(orderDTO.getSkuCode(), orderDTO.getQuantity());
+        if (isProductInStock) {
         final Order order = new Order();
         mapToEntity(orderDTO, order);
         return orderRepository.save(order).getId();
+        } else {
+            throw new NotFoundException("Product is not in stock");
+        }
     }
 
     @Override
