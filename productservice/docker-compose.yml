@@ -1,0 +1,17 @@
+services:
+  mongodb:
+    image: mongo:8.0.9
+    environment:
+    - MONGO_INITDB_DATABASE=productservice
+    command:
+    - --replSet
+    - rs0
+    - --bind_ip_all
+    ports:
+    - 27018:27017
+    healthcheck:
+      test: test $$(mongosh --quiet --eval "try {rs.initiate({_id:'rs0',members:[{_id:0,host:\"mongodb:27017\"}]})}
+        catch(e) {rs.status().ok}") -eq 1
+      interval: 5s
+      timeout: 5s
+      retries: 10
