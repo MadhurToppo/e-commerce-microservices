@@ -5,7 +5,7 @@ It demonstrates a distributed system design with resilience, observability, and 
 
 ## Architecture Diagram
 
-<img src="architecture.png" alt="Architecture Diagram" width="600"/>
+<img src="architecture.png" alt="Architecture Diagram" width="1000"/>
 
 ## Overview
 
