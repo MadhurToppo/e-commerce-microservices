@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21-jdk-alpine AS builder
+FROM eclipse-temurin:21-jdk AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN chmod +x gradlew
 RUN ./gradlew bootJar --no-daemon -x test
 
 # Create a minimal runtime image
-FROM eclipse-temurin:21-jdk-alpine
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 
 # Copy the built Spring Boot fat jar from the builder stage
