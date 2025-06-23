@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: api-gateway
+  docker:
+    compose:
+      enabled: true
+server:
+  port: 9000
