@@ -36,6 +36,7 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('io.github.wimdeblauwe:error-handling-spring-boot-starter:4.6.0')
     implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6')
+    implementation('org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j')
     compileOnly('org.projectlombok:lombok')
     annotationProcessor('org.projectlombok:lombok')
     testCompileOnly('org.projectlombok:lombok')
