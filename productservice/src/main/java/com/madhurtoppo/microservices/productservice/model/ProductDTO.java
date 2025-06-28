@@ -29,4 +29,7 @@ public class ProductDTO {
   @JsonFormat(shape = JsonFormat.Shape.STRING)
   @Schema(type = "string", example = "75.08")
   private BigDecimal price;
+
+  @Size(max = 255)
+  private String skuCode;
 }

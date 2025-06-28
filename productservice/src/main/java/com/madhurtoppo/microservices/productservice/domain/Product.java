@@ -29,6 +29,9 @@ public class Product {
   @Field(targetType = FieldType.DECIMAL128)
   private BigDecimal price;
 
+  @Size(max = 255)
+  private String skuCode;
+
   // Ensure id is auto-generated if not set
   public void ensureId() {
     if (this.id == null) {

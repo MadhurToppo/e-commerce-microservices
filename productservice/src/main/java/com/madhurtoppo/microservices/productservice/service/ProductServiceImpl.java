@@ -58,6 +58,7 @@ public class ProductServiceImpl implements ProductService {
     productDTO.setName(product.getName());
     productDTO.setDescription(product.getDescription());
     productDTO.setPrice(product.getPrice());
+    productDTO.setSkuCode(product.getSkuCode());
     return productDTO;
   }
 
@@ -65,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
     product.setName(productDTO.getName());
     product.setDescription(productDTO.getDescription());
     product.setPrice(productDTO.getPrice());
+    product.setSkuCode(productDTO.getSkuCode());
     return product;
   }
 }
