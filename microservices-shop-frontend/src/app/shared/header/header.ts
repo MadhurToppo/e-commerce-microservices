@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
     )
     this.oidcSecurityService.userData$.subscribe(
       ({userData}) => {
-        this.username = userData.preferred_username
+        this.username = userData?.preferred_username ?? "";
       }
     )
   }
