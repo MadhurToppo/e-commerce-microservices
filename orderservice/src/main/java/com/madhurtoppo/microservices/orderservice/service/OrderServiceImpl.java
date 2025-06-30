@@ -2,6 +2,7 @@ package com.madhurtoppo.microservices.orderservice.service;
 
 import com.madhurtoppo.microservices.orderservice.client.InventoryClient;
 import com.madhurtoppo.microservices.orderservice.domain.Order;
+import com.madhurtoppo.microservices.orderservice.event.OrderPlacedEvent;
 import com.madhurtoppo.microservices.orderservice.model.OrderDTO;
 import com.madhurtoppo.microservices.orderservice.repos.OrderRepository;
 import com.madhurtoppo.microservices.orderservice.util.NotFoundException;
@@ -43,7 +44,11 @@ public class OrderServiceImpl implements OrderService {
         if (isProductInStock) {
         final Order order = new Order();
         mapToEntity(orderDTO, order);
-        return orderRepository.save(order).getId();
+        Order saved = orderRepository.save(order);
+
+        // Send the message to Kafka Topic
+
+        return saved.getId();
         } else {
             throw new NotFoundException("Product is not in stock");
         }
