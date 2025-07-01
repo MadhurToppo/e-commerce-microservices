@@ -8,45 +8,50 @@ import com.madhurtoppo.microservices.orderservice.repos.OrderRepository;
 import com.madhurtoppo.microservices.orderservice.util.NotFoundException;
 import java.util.List;
 import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final InventoryClient inventoryClient;
-
-    public OrderServiceImpl(final OrderRepository orderRepository, InventoryClient inventoryClient) {
-        this.orderRepository = orderRepository;
-        this.inventoryClient = inventoryClient;
-    }
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     @Override
     public List<OrderDTO> findAll() {
         final List<Order> orders = orderRepository.findAll(Sort.by("id"));
         return orders.stream()
-                .map(order -> mapToDTO(order, new OrderDTO()))
+                .map(this::mapToDTO)
                 .toList();
     }
 
     @Override
     public OrderDTO get(final UUID id) {
         return orderRepository.findById(id)
-                .map(order -> mapToDTO(order, new OrderDTO()))
+                .map(this::mapToDTO)
                 .orElseThrow(NotFoundException::new);
     }
 
     @Override
     public UUID create(final OrderDTO orderDTO) {
-        var isProductInStock = inventoryClient.isInStock(orderDTO.getSkuCode(), orderDTO.getQuantity());
+        var isProductInStock = inventoryClient.isInStock(orderDTO.skuCode(), orderDTO.quantity());
         if (isProductInStock) {
-        final Order order = new Order();
-        mapToEntity(orderDTO, order);
-        Order saved = orderRepository.save(order);
+            Order order = new Order();
+            mapToEntity(orderDTO, order);
+            Order saved = orderRepository.save(order);
 
-        // Send the message to Kafka Topic
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderDTO.userDetails().email());
+            log.info("Start -Sending OrderPlaced {} to topic order-placed", orderPlacedEvent);
+            kafkaTemplate.send("order-placed", orderPlacedEvent);
+            log.info("End - Sending OrderPlaced {} to topic order-placed", orderPlacedEvent);
 
         return saved.getId();
         } else {
@@ -67,21 +72,15 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.deleteById(id);
     }
 
-    private OrderDTO mapToDTO(final Order order, final OrderDTO orderDTO) {
-        orderDTO.setId(order.getId());
-        orderDTO.setOrderNumber(order.getOrderNumber());
-        orderDTO.setSkuCode(order.getSkuCode());
-        orderDTO.setPrice(order.getPrice());
-        orderDTO.setQuantity(order.getQuantity());
-        return orderDTO;
+    private OrderDTO mapToDTO(final Order order) {
+        return new OrderDTO(order.getId(), order.getOrderNumber(), order.getSkuCode(), order.getPrice(), order.getQuantity(), null);
     }
 
-    private Order mapToEntity(final OrderDTO orderDTO, final Order order) {
-        order.setOrderNumber(orderDTO.getOrderNumber());
-        order.setSkuCode(orderDTO.getSkuCode());
-        order.setPrice(orderDTO.getPrice());
-        order.setQuantity(orderDTO.getQuantity());
-        return order;
+    private void mapToEntity(final OrderDTO orderDTO, final Order order) {
+        order.setOrderNumber(UUID.randomUUID().toString());
+        order.setSkuCode(orderDTO.skuCode());
+        order.setPrice(orderDTO.price());
+        order.setQuantity(orderDTO.quantity());
     }
 
 }
