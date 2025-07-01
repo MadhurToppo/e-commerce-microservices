@@ -20,7 +20,6 @@ spring:
   docker:
     compose:
       enabled: true
-      lifecycle-management: start-only
 error:
   handling:
     http-status-in-json-response: true

@@ -22,7 +22,6 @@ spring:
   docker:
     compose:
       enabled: true
-      lifecycle-management: start-only
 
 error:
   handling:

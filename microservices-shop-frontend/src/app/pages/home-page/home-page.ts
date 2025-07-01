@@ -32,13 +32,14 @@ export class HomePageComponent implements OnInit {
     this.oidcSecurityService.isAuthenticated$.subscribe(
       ({isAuthenticated}) => {
         this.isAuthenticated = isAuthenticated;
-        this.productService.getProducts()
-          .pipe()
-          .subscribe(product => {
-            this.products = product;
-          })
+        if (isAuthenticated) {
+          this.productService.getProducts()
+            .subscribe(product => {
+              this.products = product;
+            });
+        }
       }
-    )
+    );
   }
 
   goToCreateProductPage() {
