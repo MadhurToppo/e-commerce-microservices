@@ -20,6 +20,7 @@ bootRun {
 
 repositories {
     mavenCentral()
+    maven { url "https://packages.confluent.io/maven/" }
 }
 
 ext {
@@ -38,6 +39,9 @@ dependencies {
     implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6')
     implementation('org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j')
     implementation 'org.springframework.kafka:spring-kafka'
+    implementation('org.apache.avro:avro:1.11.4')
+    implementation 'io.confluent:kafka-avro-serializer:7.6.0'
+    implementation 'io.confluent:kafka-schema-registry-client:7.6.0'
     compileOnly('org.projectlombok:lombok')
     annotationProcessor('org.projectlombok:lombok')
     testCompileOnly('org.projectlombok:lombok')

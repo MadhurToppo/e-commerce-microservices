@@ -48,7 +48,11 @@ public class OrderServiceImpl implements OrderService {
             mapToEntity(orderDTO, order);
             Order saved = orderRepository.save(order);
 
-            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderDTO.userDetails().email());
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent();
+            orderPlacedEvent.setOrderNumber(saved.getOrderNumber());
+            orderPlacedEvent.setEmail(orderDTO.userDetails().email());
+            orderPlacedEvent.setFirstName(orderDTO.userDetails().firstName());
+            orderPlacedEvent.setLastName(orderDTO.userDetails().lastName());
             log.info("Start -Sending OrderPlaced {} to topic order-placed", orderPlacedEvent);
             kafkaTemplate.send("order-placed", orderPlacedEvent);
             log.info("End - Sending OrderPlaced {} to topic order-placed", orderPlacedEvent);
