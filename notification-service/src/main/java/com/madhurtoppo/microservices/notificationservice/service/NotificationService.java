@@ -22,7 +22,6 @@ public class NotificationService {
         log.info("Received Order Placed Event {}", orderPlacedEvent);
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom("springshop@email.com");
             messageHelper.setTo(orderPlacedEvent.getEmail().toString());
             messageHelper.setSubject(String.format("Your Order with OrderNumber %s is placed successfully", orderPlacedEvent.getOrderNumber()));
             messageHelper.setText(String.format("""
@@ -42,7 +41,7 @@ public class NotificationService {
             log.info("Order Notification email sent!!");
         } catch (MailException e) {
             log.error("Exception occurred when sending mail", e);
-            throw new RuntimeException("Exception occurred when sending mail to springshop@email.com", e);
+            throw new RuntimeException("Exception occurred when sending mail.", e);
         }
     }
 }

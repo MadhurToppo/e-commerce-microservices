@@ -2,14 +2,15 @@ spring:
   application:
     name: notification-service
   mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 2525
-    username: 19b42395bc88b1
-    password: 286078226b31fd
+    host: smtp.gmail.com
+    port: 587
+    username: madhur.toppo@gmail.com
+    password: jcsu bjtj uxgc wavj
     properties:
-      mail:
-        smtp:
-          auth: true
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+      mail.smtp.ssl.trust: smtp.gmail.com
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
