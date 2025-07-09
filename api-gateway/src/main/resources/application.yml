@@ -48,6 +48,7 @@ management:
     key-values:
       application: api-gateway
   tracing:
+    enabled: true
     sampling:
       probability: 1.0
 
