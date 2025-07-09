@@ -23,8 +23,14 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HOSTNAME_STRICT_HTTPS: 'false'
+      KC_HTTP_ENABLED: 'true'
     ports:
-      - 8181:8080
+      - "8181:8080"
+    volumes:
+      - ./docker/keycloak/realms/:/opt/keycloak/data/import/
     restart: always
     depends_on:
       - postgres
@@ -36,6 +42,8 @@ services:
     command: [ '-config.file=/etc/loki/local-config.yaml' ]
     ports:
       - '3100:3100'
+    networks:
+      - keycloak_network
 
   prometheus:
     image: prom/prometheus:v2.46.0
@@ -46,6 +54,8 @@ services:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     ports:
       - '9090:9090'
+    networks:
+      - keycloak_network
 
   tempo:
     image: grafana/tempo:2.2.2
@@ -54,8 +64,10 @@ services:
       - ./docker/tempo/tempo.yml:/etc/tempo.yaml:ro
       - ./docker/tempo/tempo-data:/tmp/tempo
     ports:
-      - '3110:3100' # Tempo
+      - '3200:3200' # Tempo HTTP (matches http_listen_port)
       - '9411:9411' # zipkin
+    networks:
+      - keycloak_network
 
   grafana:
     image: grafana/grafana:10.1.0
@@ -67,6 +79,8 @@ services:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
     ports:
       - '3000:3000'
+    networks:
+      - keycloak_network
 
 volumes:
   postgres_data:
