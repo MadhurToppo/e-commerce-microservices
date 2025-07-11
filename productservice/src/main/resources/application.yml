@@ -32,6 +32,7 @@ management:
     key-values:
       application: product-service
   tracing:
+    enabled: true
     sampling:
       probability: 1.0
 
