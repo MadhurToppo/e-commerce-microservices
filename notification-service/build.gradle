@@ -27,9 +27,15 @@ dependencies {
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:kafka'
+	implementation('org.springframework.boot:spring-boot-starter-actuator')
 	implementation('org.apache.avro:avro:1.11.3')
 	implementation 'io.confluent:kafka-avro-serializer:7.6.0'
 	implementation 'io.confluent:kafka-schema-registry-client:7.6.0'
+	implementation('com.github.loki4j:loki-logback-appender:1.4.2')
+	runtimeOnly('io.micrometer:micrometer-registry-prometheus')
+	implementation('io.micrometer:micrometer-tracing-bridge-brave')
+	implementation('io.zipkin.reporter2:zipkin-reporter-brave')
+	implementation('org.springframework.boot:spring-boot-starter-aop')
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	compileOnly('org.projectlombok:lombok')
 	annotationProcessor('org.projectlombok:lombok')
