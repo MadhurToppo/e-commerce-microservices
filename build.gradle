@@ -1,0 +1,44 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.0' apply false
+    id 'io.spring.dependency-management' version '1.1.7' apply false
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    group = 'com.madhurtoppo.microservices'
+    version = '1.0-SNAPSHOT'
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+project(':api-gateway') {}
+project(':productservice') {}
+project(':orderservice') {}
+project(':inventoryservice') {}
+project(':notification-service') {}
+
+ext {
+    springBootVersion = '3.5.0'
+    springCloudVersion = '2023.0.1'
+}
+
+allprojects {
+    plugins.withId('org.springframework.boot') {
+        bootBuildImage {
+            imageName = "madhurtoppo/${project.name}:latest"
+            publish = true
+            docker {
+                publishRegistry {
+                    username = 'madhurtoppo'
+                    password = System.getenv('DOCKER_PASSWORD') ?: System.getProperty('DOCKER_PASSWORD', '')
+                }
+            }
+            builder = 'dashaun/builder:tiny'
+        }
+    }
+}

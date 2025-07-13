@@ -72,7 +72,8 @@ server:
   port: 8081
 
 inventory:
-  url: http://localhost:8083
+  service:
+    url: http://localhost:8083
 
 springdoc:
   pathsToMatch: /, /api/**
