@@ -46,8 +46,8 @@ spec:
     app: notification-service
   ports:
     - protocol: TCP
-      port: 8083
-      targetPort: 8083
+      port: 8084
+      targetPort: 8084
 ---
 apiVersion: v1
 kind: ConfigMap

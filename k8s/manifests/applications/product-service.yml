@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: product-service
-          image: madhurtoppo/product-service:latest
+          image: madhurtoppo/productservice:latest
           env:
             - name: SPRING_DATA_MONGODB_URI
               valueFrom:
@@ -41,8 +41,8 @@ spec:
     app: product-service
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
+      port: 8082
+      targetPort: 8082
 ---
 apiVersion: v1
 kind: ConfigMap

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: inventory-service
-          image: madhurtoppo/inventory-service:latest
+          image: madhurtoppo/inventoryservice:latest
           env:
             - name: SPRING_DATASOURCE_URL
               valueFrom:
@@ -41,12 +41,12 @@ spec:
     app: inventory-service
   ports:
     - protocol: TCP
-      port: 8082
-      targetPort: 8082
+      port: 8083
+      targetPort: 8083
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: inventory-service-config
 data:
-  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql.default.svc.cluster.local:3306/inventory_service"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgresql.default.svc.cluster.local:5432/inventoryservice"
