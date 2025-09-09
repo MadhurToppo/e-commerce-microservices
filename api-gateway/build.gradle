@@ -47,3 +47,15 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+tasks.bootBuildImage {
+    imageName = "madhurtoppo/${project.name}:latest"
+    publish = true
+    docker {
+        publishRegistry {
+            username = "madhurtoppo"
+            password = System.getenv('DOCKER_PASSWORD') ?: System.getProperty('DOCKER_PASSWORD', '')
+        }
+    }
+    builder = 'dashaun/builder:tiny'
+}

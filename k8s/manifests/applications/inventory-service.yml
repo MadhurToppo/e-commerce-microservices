@@ -31,6 +31,16 @@ spec:
                 configMapKeyRef:
                   key: MANAGEMENT_ZIPKIN_TRACING_ENDPOINT
                   name: common-config
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: SPRING_DATASOURCE_USERNAME
+                  name: postgres-secrets
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: SPRING_DATASOURCE_PASSWORD
+                  name: postgres-secrets
 ---
 apiVersion: v1
 kind: Service
@@ -49,4 +59,4 @@ kind: ConfigMap
 metadata:
   name: inventory-service-config
 data:
-  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgresql.default.svc.cluster.local:5432/inventoryservice"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres.default.svc.cluster.local:5432/inventoryservice"
