@@ -54,7 +54,9 @@ spec:
 ---
 apiVersion: v1
 data:
-  postgres_root_password: cG9zdGdyZXM=
+  postgres_root_password: cGFzc3dvcmQ=
+  SPRING_DATASOURCE_USERNAME: cG9zdGdyZXM=
+  SPRING_DATASOURCE_PASSWORD: cGFzc3dvcmQ=
 kind: Secret
 metadata:
   name: postgres-secrets
