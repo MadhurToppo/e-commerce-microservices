@@ -87,5 +87,6 @@ tasks.bootBuildImage {
             password = System.getenv('DOCKER_PASSWORD') ?: System.getProperty('DOCKER_PASSWORD', '')
         }
     }
-    builder = 'dashaun/builder:tiny'
+    builder = 'paketobuildpacks/builder-jammy-java-tiny'
+    imagePlatform = 'linux/arm64'
 }
